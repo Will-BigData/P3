@@ -1,5 +1,5 @@
 To download everything
-wget -r -np -nH --cut-dirs=3 -R "index.html*" ftp:<URL HERE>
+wget -r -np -nH --cut-dirs=3 -R "index.html*" ftp:<URL HERE, no https, replace www with ftp as well>
 
 Unzip Everything
 find /path/to/folder -name "*.zip" -exec unzip -d "{}_unzipped" {} \;
