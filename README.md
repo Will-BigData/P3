@@ -5,6 +5,7 @@ Orlando Lopez
 Zakaria Alhomsy
 James Bushek
 Nathan Allers
+Dane Sperling
 
 
 Jake Hunter  jmh3649
