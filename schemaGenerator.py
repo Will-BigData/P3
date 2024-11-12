@@ -23,7 +23,7 @@ def generateSegment1Schema():
     line = segment.readline().strip()
     columns = line.split(',')
 
-    segment_string_columns = ["FILEID", "CHARITER", "CIFSN"]
+    segment_string_columns = ["FILEID", "CHARITER", "CIFSN", "STUSAB"]
     fields_array = []
 
     for column in columns:
@@ -41,7 +41,7 @@ def generateSegment2Schema():
     line = segment.readline().strip()
     columns = line.split(',')
 
-    segment_string_columns = ["FILEID", "CHARITER", "CIFSN"]
+    segment_string_columns = ["FILEID", "CHARITER", "CIFSN", "STUSAB"]
     fields_array = []
 
     for column in columns:
@@ -59,7 +59,7 @@ def generateSegment3Schema():
     line = segment.readline().strip()
     columns = line.split(',')
 
-    segment_string_columns = ["FILEID", "CHARITER", "CIFSN"]
+    segment_string_columns = ["FILEID", "CHARITER", "CIFSN", "STUSAB"]
     fields_array = []
 
     for column in columns:
