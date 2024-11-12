@@ -1,4 +1,4 @@
-columns needed for questions 1,2,3,8,9,11
+columns needed for questions 1,2,3,8,9,11,13
 
 segment 1:
 
@@ -74,3 +74,10 @@ For each state, can determine if occupied/vacant ratio went up or down between d
 
 11:
 we can get the average household size by diving the population(pop100) by the number of housing units(hu100) for each state(state/stusab)
+
+
+13:
+grab the housing unit count (HU100) and sum it for a total across all states and compare across years
+
+group the sum by state instead for a comparison across the years by state
+
