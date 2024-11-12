@@ -7,7 +7,6 @@ import os
 load_dotenv()
 
 main_path = os.getenv('FOLDER_PATH', '')
-print(main_path)
 
 spark_builder: SparkSession.Builder = SparkSession.builder
 spark_builder.appName("p3-census").config("spark.master", "local[*]")
@@ -15,12 +14,9 @@ spark_builder.appName("p3-census").config("spark.master", "local[*]")
 spark: SparkSession = spark_builder.getOrCreate()
 sc = spark.sparkContext
 
-schema = generateGeoSegmentSchema()
-print(len(schema))
-
 geo_df = spark.read.csv(f'{main_path}/GeoHeader', sep='|', schema=generateGeoSegmentSchema())
 seg1_df = spark.read.csv(f'{main_path}/Segment1', sep='|', schema=generateSegment1Schema())
 seg2_df = spark.read.csv(f'{main_path}/Segment2', sep='|', schema=generateSegment2Schema())
 seg3_df = spark.read.csv(f'{main_path}/Segment3', sep='|', schema=generateSegment3Schema())
-geo_df.filter(col(geo_df.columns[1])=='US').show()
+print(seg2_df.filter(col(geo_df.columns[1])=='US').head())
 
