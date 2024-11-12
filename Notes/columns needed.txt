@@ -1,0 +1,76 @@
+columns needed for questions 1,2,3,8,9,11
+
+segment 1:
+
+STUSAB 
+P0010001
+P0010003
+P0010004
+P0010005
+P0010006
+P0010007
+P0010008
+P0010009
+P0010026
+P0010047
+P0010063
+P0010070
+
+segment 2:
+
+STUSAB 
+P0020002
+P0020003
+P0020005
+P0020006
+P0020007
+P0020008
+P0020009
+P0020010
+P0020012
+P0020028
+P0020049
+P0020065
+P0020072
+H0010002
+H0010003
+
+Geo:
+STUSAB
+UR
+POP100
+HU100
+STATE
+
+
+
+
+How we plan on using the data to answer the questions:
+
+1: 
+aggregate the population data across each state and compare across the years.
+
+2: 
+calculate population percentage change for each state across the years and compare to other states.
+
+3:
+aggregate rural and urban population across states and compare across the years
+
+8:
+Divide each racial demographic (white, asian, etc) by the total population to get the percentage.
+Add mixed race total values together and divide by total population.
+This gives percentage of the country for each race, and can be compared to the other decades to see change over time.
+
+For ethnicity, sum up the total of each race that identifies as hispanic/latino (as well as mixed race).
+Subtract the non-hispanic/latino totals for each race from the total count of each race (from the previous columns) to get hispanic/latino totals.
+Divide hispanic/latino totals for each race by sum of each race (EX: sum of whites that identify as hispanic / sum of whites) to get % of hispanic/latino
+Can sum the mixed race, non-latino values and subtract from mixed race total values to get % of mixed race that identifies as latino/hispanic
+
+9:
+ Add total occupied and total vacant to get total housing count. Divide each by total housing to get % occupied/vacant.
+Compare housing unit count (HU100) to the previously calculated total housing count.
+Can use each state's population count (POP100) for each decade to see which states gained and lost population.
+For each state, can determine if occupied/vacant ratio went up or down between decades.
+
+11:
+we can get the average household size by diving the population(pop100) by the number of housing units(hu100) for each state(state/stusab)
