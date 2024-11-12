@@ -1,9 +1,4 @@
-from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
-
-spark = SparkSession.builder.appName("census-dataset")\
-.config("spark.master", "local[*]")\
-.getOrCreate()
 
 def generateGeoSegmentSchema():
     geoSegment =  open("data/2020_FieldNames_GeoSegment.csv")
@@ -33,9 +28,9 @@ def generateSegment1Schema():
 
     for column in columns:
         if column in segment_string_columns:
-            fields_array.append(StructField(column, IntegerType(), True))
-        else:
             fields_array.append(StructField(column, StringType(), True))
+        else:
+            fields_array.append(StructField(column, IntegerType(), True))
 
     schema = StructType(fields_array)
 
@@ -51,9 +46,9 @@ def generateSegment2Schema():
 
     for column in columns:
         if column in segment_string_columns:
-            fields_array.append(StructField(column, IntegerType(), True))
-        else:
             fields_array.append(StructField(column, StringType(), True))
+        else:
+            fields_array.append(StructField(column, IntegerType(), True))
 
     schema = StructType(fields_array)
 
@@ -69,9 +64,9 @@ def generateSegment3Schema():
 
     for column in columns:
         if column in segment_string_columns:
-            fields_array.append(StructField(column, IntegerType(), True))
-        else:
             fields_array.append(StructField(column, StringType(), True))
+        else:
+            fields_array.append(StructField(column, IntegerType(), True))
 
     schema = StructType(fields_array)
 
