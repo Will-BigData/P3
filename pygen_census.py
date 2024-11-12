@@ -6,7 +6,7 @@ spark = SparkSession.builder.appName("FixedWidthRead").getOrCreate()
 
 geo_column_dict = {}
 
-with open("/home/nispri/2010+2000geoheaders.txt") as file:
+with open("data/2010+2000geoheaders.txt") as file:
     for line in file:
         key_value = line.split(',')
         geo_column_dict[key_value[0]] = int(key_value[1].strip())
@@ -20,7 +20,7 @@ for key in geo_column_dict.keys():
 schema = StructType(fields)
 
 # Read the file as a single column of text
-data = spark.read.text("./algeo2010.pl")  # Update with the path to argeo2010.pl
+data = spark.read.text("P3-2010/GeoHeader")  # Update with the path to argeo2010.pl
 
 # Define function to split the line by byte widths and create Row objects
 def split_fixed_width(line):
