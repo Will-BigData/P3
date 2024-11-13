@@ -6,23 +6,17 @@ spark = SparkSession.builder.appName("FixedWidthRead").getOrCreate()
 
 geo_column_dict = {}
 
+# Load the column widths from file
 with open("/home/nispri/2010+2000geoheaders.txt") as file:
     for line in file:
         key_value = line.split(',')
         geo_column_dict[key_value[0]] = int(key_value[1].strip())
 
-fields = []
-
-# Define schema with expected field widths for a subset of fields
-for key in geo_column_dict.keys():
-    fields.append(StructField(key, StringType(), True))
-
+# Define the schema based on the column widths
+fields = [StructField(key, StringType(), True) for key in geo_column_dict.keys()]
 schema = StructType(fields)
 
-# Read the file as a single column of text
-data = spark.read.text("./algeo2010.pl")  # Update with the path to argeo2010.pl
-
-# Define function to split the line by byte widths and create Row objects
+# Define a function to split each line by byte width into columns
 def split_fixed_width(line):
     row_data = {}
     start = 0
@@ -30,11 +24,17 @@ def split_fixed_width(line):
         row_data[column] = line[start:start+width].strip()
         start += width
     return Row(**row_data)
-    
-# Apply parsing logic and create DataFrame
-parsed_data = data.rdd.map(lambda row: split_fixed_width(row['value']))
-df = spark.createDataFrame(parsed_data, schema)
 
-# Show results
+def gen_schema(data):
+    # Apply the parsing function to the input dataframe
+    parsed_data = data.rdd.map(lambda row: split_fixed_width(row['value']))
+    df = spark.createDataFrame(parsed_data, schema)
+
+    return df
+
+# Example usage
+# Assuming 'data' is a DataFrame with a single column 'value'
+data = spark.read.text("/user/nispri/algeo2010.pl")
+df = gen_schema(data)
 df.show()
 
