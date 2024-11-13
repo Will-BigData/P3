@@ -51,3 +51,10 @@ P0050003
 P0050004
 
 With these tables we can see the changes in our prison populations and the percentage of minors that get into juvinile centers. 
+
+Kenny
+1. (# 13 in the original list) Housing Unit Changes: How did the number of housing units change by decade, and what is the comparison across states?
+
+2. Population Density: How did population density vary across urban and rural areas over the decade?
+
+3. How does population density vary by summary level (e.g., city, county, state)?
