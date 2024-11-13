@@ -1,0 +1,53 @@
+group 3 data analysis questions:
+
+
+Michael
+1. What are the land and water areas (AREALAND, AREAWATR) of different geographic divisions, and how do they compare?
+
+
+how this could be done:
+
+~Fields like AREALAND and AREAWATR represent the land and water area of each geographic division. 
+~STATE, COUNTY, TRACT, or REGION, may represent different hierarchical or spatial divisions.
+AREAWATR 
+~Use grouping by Geographic Divisions to analyze the total land and water areas within each division
+~Calculate the proportion of land to water area within each geographic division. 
+
+
+2. Are there correlations between population and land area or population and water area?
+
+
+how this could be done:
+~Use fields like population (POP100), land area (AREALAND), and water area (AREAWATR)
+~Use Pearson correlation to understand the relationships between population and land area, as well as population and water area. 
+
+
+3. what percentage of the population lives in metropolitan versus non-metropolitan areas?
+
+how this could be done:
+~User fields like CBSA or CSA to distinguish between metropolitan and non-metropolitan areas.
+~Also, include POP100 (population count) to get the population of each geographic area.
+~Filter Metropolitan vs. Non-Metropolitan Areas: 
+	Records with a non-null CBSA or CSA code typically represent metropolitan areas, while records without these codes are usually considered non-metropolitan. 
+	We can create a new column called Metro_NonMetro:
+		Set the value to "Metropolitan" if CBSA or CSA is non-null.
+		Set the value to "Non-Metropolitan" if both are null.
+
+~Aggregate Population by Metropolitan and Non-Metropolitan Areas:
+	Use the POP100 field to calculate the total population for metropolitan and non-metropolitan areas.
+	Sum up POP100 for each group "Metropolitan" and "Non-Metropolitan".
+
+~Calculate the Percentage:
+	Calculate the total population (sum of POP100 for all records).
+	Divide the metropolitan population by the total population and multiply by 100 to get the percentage of the population in metropolitan areas.
+	calculate the percentage for non-metropolitan areas.
+
+Dane
+
+1. How has the incarcerated population changed over the decades, going over population of correctional facilities and juvinile detention centers
+
+segment 3 
+P0050003
+P0050004
+
+With these tables we can see the changes in our prison populations and the percentage of minors that get into juvinile centers. 
