@@ -60,9 +60,25 @@ P0050008
 
 With this information we might be able to see estimate the increase of campus housing needs
 
-Kenny
+Kenny:
 1. (# 13 in the original list) Housing Unit Changes: How did the number of housing units change by decade, and what is the comparison across states?
+Geoheader:
+HU100
+Using the housing units count, we should be able to see the count for each decade in total, and then also subdivide it between states.
 
-2. Population Density: How did population density vary across urban and rural areas over the decade?
+2. Population Density: How did population density vary across urban and rural areas over the decade(s)?
+Geoheader:
+POP100
+UA 
+UATYPE (maybe)
+UR
+Using the population count we should see the total density and then find out which lived in an urban area versus a rural area and possibly show the differences between the 3 decades (or keep it at one decade).
 
 3. How does population density vary by summary level (e.g., city, county, state)?
+Geoheader:
+POP100
+SUMLEV
+STATE (FIPS) (maybe)
+COUNTY (FIPS) (maybe)
+CONCIT (maybe - Consolidated City)
+Using the population count we should also be able to filter the total population by summary level - thinking state, city, and maybe county. 
