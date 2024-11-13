@@ -71,3 +71,34 @@ def generateSegment3Schema():
     schema = StructType(fields_array)
 
     return schema
+
+def generate2000Segment2Schema():
+    segment = open("data/2020_FieldNames_Segment2.csv")
+    line = segment.readline().strip()
+    columns = line.split(',')
+    columns.remove("H0010001")
+    columns.remove("H0010002")
+    columns.remove("H0010003")
+
+    segment_string_columns = ["FILEID", "CHARITER", "CIFSN", "STUSAB"]
+
+    fields_array = []
+
+    for column in columns:
+        if column in segment_string_columns:
+            fields_array.append(StructField(column, StringType(), True))
+        else:
+            fields_array.append(StructField(column, IntegerType(), True))
+
+    schema = StructType(fields_array)
+
+    return schema
+
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("FixedWidthRead").getOrCreate()
+
+df = spark.createDataFrame([], generate2000Segment2Schema())
+
+df.printSchema()
