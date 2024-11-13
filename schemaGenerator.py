@@ -93,12 +93,3 @@ def generate2000Segment2Schema():
     schema = StructType(fields_array)
 
     return schema
-
-
-from pyspark.sql import SparkSession
-
-spark = SparkSession.builder.appName("FixedWidthRead").getOrCreate()
-
-df = spark.createDataFrame([], generate2000Segment2Schema())
-
-df.printSchema()
