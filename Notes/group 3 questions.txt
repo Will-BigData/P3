@@ -42,3 +42,12 @@ how this could be done:
 	Divide the metropolitan population by the total population and multiply by 100 to get the percentage of the population in metropolitan areas.
 	calculate the percentage for non-metropolitan areas.
 
+Dane
+
+1. How has the incarcerated population changed over the decades, going over population of correctional facilities and juvinile detention centers
+
+segment 3 
+P0050003
+P0050004
+
+With these tables we can see the changes in our prison populations and the percentage of minors that get into juvinile centers. 
