@@ -22,11 +22,12 @@ with open("data/2000-geoheader.txt") as file:
 schema_2000 = StructType([StructField(key, StringType(), True) for key in geo_column_dict_2000.keys()])
 
 # Define a function to split each line by byte width into columns
-def split_fixed_width(line, pairs):
+def split_fixed_width(line: str, pairs):
     row_data = {}
     start = 0
     for column, width in pairs.items():
-        row_data[column] = line[start:start+width].strip()
+        value = line[start:start+width].strip()
+        row_data[column] = None if len(value) == 0 else value
         start += width
     return Row(**row_data)
 
