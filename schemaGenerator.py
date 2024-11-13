@@ -1,7 +1,7 @@
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 
-def generateGeoSegmentSchema():
-    geoSegment =  open("data/2020_FieldNames_GeoSegment.csv")
+def generate2020GeoSegmentSchema():
+    geoSegment = open("data/2020_FieldNames_GeoSegment.csv")
     geoLine = geoSegment.readline().strip()
     geo_columns = geoLine.split(',')
 
@@ -36,7 +36,7 @@ def generateSegment1Schema():
 
     return schema
 
-def generateSegment2Schema():
+def generate2020And2010Segment2Schema():
     segment = open("data/2020_FieldNames_Segment2.csv")
     line = segment.readline().strip()
     columns = line.split(',')
