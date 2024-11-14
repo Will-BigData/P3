@@ -22,6 +22,12 @@ Segment 2 fields/columns  =  152
 Segment 3 fields/columns  = 15
 
 
+#Found the 3 missing columns from segment 2:
+H0010001
+H0010002
+H0010003
+
+
 #find out the missing 20 columns from Geoheader
 #find out the missing 3 columns from segment 2 
 
