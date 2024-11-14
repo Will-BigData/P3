@@ -3,7 +3,7 @@ Extra questions:
 group 2:
 
 1.  How does the racial makeup of adults differ from children/minors (under 18s)? 
-segment 2: P0030001, P0030003 through P0030008, P0030010, P0030026, P0030047, P0030063, P0030070
+
 
 Separate the data into two groups: children/minors (under 18) and adults (18 and over).
 For each age group aggregate Population Count by each race category to get total counts by race within each age group.
@@ -15,14 +15,14 @@ we need total count of each racial category
 aggregate the population values for each racial categroy
 
 3. What are the top 10 counties with the highest diversity index, and how does it change from 2000-2020?
-GEO: COUNTY
+
 
 calculate a diversity index for each county( will find out how )
 rank the counties by diversity index
 pick the top 10
 
 4. How does the racial distribution vary between metropolitan and micropolitan areas from 2000-2020?
-GEO: METDIV, MEMI
+
 
 Filter the data by metropolitan and micropolitan area codes.
 Within each category, group by race and calculate the racial distribution
@@ -32,8 +32,7 @@ Within each category, group by race and calculate the racial distribution
 Aggregate housing unit counts at the state level by summing the Housing Unit Count for each state. This would give us the total units per state, and then we'd compare them by the different census years. To find the difference in the 10 counties, we would aggregate the units by county, then see how it changes over time.
 
 6. How does the vacany rate change over time within urban and rural areas over time?
-segment 2: H0010001 
-GEO: UA, UR
+
 
 vacancy rate: vacant units/total units
 split the data into urban and rural segments. then for each region type we would find the vacancy rate and compare it over time.  
