@@ -2,22 +2,28 @@ from pyspark.sql import SparkSession
 
 
 def select_specified_columns(df, columns_file):
-
     # Step 1: Read the list of specified columns
     with open(columns_file, "r") as f:
         specified_columns = [line.strip() for line in f.readlines()]
 
-    # Step 2: Select only the specified columns from the input DataFrame
-    df_selected = df.select(*specified_columns)
+    # Step 2: Validate and filter specified columns to include only those present in the DataFrame
+    valid_columns = [col for col in specified_columns if col in df.columns]
+    
+    # Optional: Display a warning if any specified columns are missing
+    missing_columns = set(specified_columns) - set(valid_columns)
+    if missing_columns:
+        print(f"Warning: The following columns are missing in the DataFrame and will be ignored: {missing_columns}")
 
-    df_selected.show()
+    # Step 3: Select only the valid columns
+    df_selected = df.select(*valid_columns)
 
     return df_selected
 
-# Initialize Spark session
+
+# # Initialize Spark session
 # spark = SparkSession.builder.appName("SelectColumnsTest").getOrCreate()
 
-# Sample DataFrame for demonstration
+# # Sample DataFrame for demonstration
 # data = [
 #     ("US", "NY", "010", "01", "001", "10001", "3", "1", "36", "001", 80000, 30000, "40.7128", "-74.0060"),
 #     ("US", "CA", "020", "02", "002", "10002", "4", "2", "06", "075", 150000, 50000, "34.0522", "-118.2437"),
@@ -26,17 +32,17 @@ def select_specified_columns(df, columns_file):
 # columns = ["FILEID", "STUSAB", "SUMLEV", "GEOCOMP", "CHARITER", "LOGRECNO", "REGION", "DIVISION",
 #            "STATE", "COUNTY", "POP100", "HU100", "INTPTLAT", "INTPTLON"]
 
-# Creating the DataFrame
+# # Creating the DataFrame
 # df = spark.createDataFrame(data, columns)
 
-# Specify the columns file path
+# # Specify the columns file path
 # columns_file = "columns_file.txt"
 
-# Call the function to get the selected columns
+# # Call the function to get the selected columns
 # df_selected = select_specified_columns(df, columns_file)
 
-# Show the resulting DataFrame with selected columns
+# # Show the resulting DataFrame with selected columns
 # df_selected.show()
 
-# Stop the Spark session
+# # Stop the Spark session
 # spark.stop()
