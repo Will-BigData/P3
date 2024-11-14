@@ -1,0 +1,29 @@
+
+2000 fields's 
+
+Geoheader fields/columns = 99
+
+Segment 1 fields/columns  = 149
+
+Segment 2 fields/columns  = 149
+
+Segment 3 fields/columns  = NONE
+
+
+
+2020 fields/columns 
+
+Geoheader fields/columns = 99
+
+Segment 1 fields/columns  = 149
+
+Segment 2 fields/columns  =  152
+
+Segment 3 fields/columns  = 15
+
+
+#find out the missing 3 columns from segment 2 
+
+#make sure we don't need any columns from segment 3
+
+
