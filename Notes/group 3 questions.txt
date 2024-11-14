@@ -123,14 +123,14 @@ P0050009
 Sum P0050009, then divide by POP100 and group by census year, additionally by STUSAB
 
 
-4. How does the percentage of student population change across the years? By State?
+4. How does the percentage of student population change across the years by State?
 Geoheader:
 STUSAB
 POP100
 
 Segment 3:
 P0050008
-Sum P0050008, then divide by POP100 and group by census year, additionally by STUSAB
+Sum P0050008, then divide by POP100 and group by census year and by STUSAB
 
 
 
