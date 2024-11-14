@@ -5,7 +5,7 @@ from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
-from combiner import combine2000
+from combiner import combine2000, combine2020
 load_dotenv()
 
 import sys
@@ -23,8 +23,7 @@ seg1_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment1', sep='|', schema=g
 seg2_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment2', sep='|', schema=generate2020And2010Segment2Schema()).drop("CIFSN").drop("CHARITER")
 seg3_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment3', sep='|', schema=generateSegment3Schema()).drop("CIFSN").drop("CHARITER")
 
-link_cols = ["FILEID", "STUSAB", "LOGRECNO"]
-combined_df_2020 = geo_df.join(seg1_df, link_cols).join(seg2_df, link_cols).join(seg3_df, link_cols)
+combined_df_2020 = combine2020(geo_df, seg1_df, seg2_df, seg3_df)
 
 geo_df_2010 = gen_schema(spark.read.text(f"{main_path}/p3_data_2010/GeoHeader"), spark, 2010)
 seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=generateSegment1Schema())
