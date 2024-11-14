@@ -141,10 +141,10 @@ Sum P0050008, then divide by POP100 and group by census year and by STUSAB
 Unique Columns Needed:
 STUSAB
 POP100
+HU100
 SUMLEV
 VTD
-STATE (FIPS)
-COUNTY (FIPS)
+STATE
 CONCIT
 UA 
 UATYPE
