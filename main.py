@@ -5,7 +5,10 @@ from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
+from combiner import combine2000
 load_dotenv()
+
+import sys
 
 main_path = os.getenv('FOLDER_PATH', '')
 
@@ -27,11 +30,11 @@ geo_df_2010 = gen_schema(spark.read.text(f"{main_path}/p3_data_2010/GeoHeader"),
 seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=generateSegment1Schema())
 seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', schema=generate2020And2010Segment2Schema())
 
-geo_df_2000 = gen_schema(spark.read.text(f"{main_path}/p3_data_2000/GeoHeader"), spark, 2000)
-seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=generateSegment1Schema())
-seg2_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment2', sep=',', schema=generate2000Segment2Schema())
+geo_df_2000 = gen_schema(spark.read.text(f"{main_path}/p3_data_2000/GeoHeader"), spark, 2000).drop("CIFSN").drop("CHARITER")
+seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=generateSegment1Schema()).drop("CIFSN").drop("CHARITER")
+seg2_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment2', sep=',', schema=generate2000Segment2Schema()).drop("CIFSN").drop("CHARITER")
 
-geo_df_2000.show()
+# df_2000 = combine2000(geo_df_2000, seg1_df_2000, seg2_df_2000)
 # print(seg2_df.filter(col(geo_df.columns[1])=='US').head())
 # seg1_df_2000.show()
 
