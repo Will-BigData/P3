@@ -82,3 +82,52 @@ STATE (FIPS) (maybe)
 COUNTY (FIPS) (maybe)
 CONCIT (maybe - Consolidated City)
 Using the population count we should also be able to filter the total population by summary level - thinking state, city, and maybe county. 
+
+James
+1. What is the total percentage of people of mixed race across the years? By state?
+Geoheader:
+STUSAB
+POP100
+
+Segment 1:
+P0010009
+P0020011
+Sum both P0010009 & P0020011 and add them together into Mixed_Race_Total then Mixed_Race_Total/POP100,
+group by census year, additionally group by state for more insight
+
+
+2. How does the distribution of race across Voting Districts for eligible voters change across the years?
+Geoheader:
+VTD
+POP100
+
+Segment 2:
+P0040002
+P0040005
+P0040006
+P0040007
+P0040008
+P0040009
+P0040010
+Segment2Column/POP100 each, group by VTD
+
+
+
+3. How does the percentage of military population change across the years? By State?
+Geoheader:
+STUSAB
+POP100
+
+Segment 3:
+P0050009
+Sum P0050009, then divide by POP100 and group by census year, additionally by STUSAB
+
+
+4. How does the percentage of student population change across the years? By State?
+Geoheader:
+STUSAB
+POP100
+
+Segment 3:
+P0050008
+Sum P0050008, then divide by POP100 and group by census year, additionally by STUSAB
