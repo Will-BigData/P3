@@ -12,6 +12,7 @@ load_dotenv()
 import sys
 
 main_path = os.getenv('FOLDER_PATH', '')
+output_path = os.getenv('OUTPUT_PATH', '')
 
 spark_builder: SparkSession.Builder = SparkSession.builder
 spark_builder.appName("p3-census").config("spark.master", "local[*]")
@@ -52,12 +53,7 @@ combined_df_2010 = geo_df_2010.join(seg1_df_2010, link_cols).join(seg2_df_2010, 
 combined_df_2000 = geo_df_2000.join(seg1_df_2000, link_cols).join(seg2_df_2000, link_cols).withColumn("YEAR", lit(2000))
 
 final_data = combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True)
-
-original_stdout = sys.stdout
-
-with open('NotesToSelf/output.txt', 'w') as f:
-    sys.stdout = f
-    combined_df_2000.show()
+final_data.write.mode("overwrite").partitionBy("YEAR", "STUSAB").parquet(output_path)
 
 # df_2000 = combine2000(geo_df_2000, seg1_df_2000, seg2_df_2000)
 # print(seg2_df.filter(col(geo_df.columns[1])=='US').head())
