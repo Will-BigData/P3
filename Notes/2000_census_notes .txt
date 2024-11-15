@@ -28,7 +28,7 @@ H0010002
 H0010003
 
 
-#Feilds that are unique to 2020 and are not present in 2000 = 49
+#GEOheader Feilds that are unique  to 2020 and are not present in 2000 = 49
 AIANHHNS
 AITSFP
 AITSNS
@@ -129,7 +129,7 @@ UR
 VTD
 VTDI
 
-#Feilds that are unique to 2000 and are not present in 2020 = 31
+#GEOheader Feilds that are unique to 2000 and are not present in 2020 = 31
 AITSCE
 CD106
 CD108
