@@ -6,6 +6,7 @@ from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
 from combiner import combine2000
+from specified_columns.select_specified_columns import select_specified_columns
 load_dotenv()
 
 import sys
@@ -23,9 +24,6 @@ seg1_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment1', sep='|', schema=g
 seg2_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment2', sep='|', schema=generate2020And2010Segment2Schema()).drop("CIFSN").drop("CHARITER")
 seg3_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment3', sep='|', schema=generateSegment3Schema()).drop("CIFSN").drop("CHARITER")
 
-link_cols = ["FILEID", "STUSAB", "LOGRECNO"]
-combined_df_2020 = geo_df.join(seg1_df, link_cols).join(seg2_df, link_cols).join(seg3_df, link_cols)
-
 geo_df_2010 = gen_schema(spark.read.text(f"{main_path}/p3_data_2010/GeoHeader"), spark, 2010)
 seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=generateSegment1Schema())
 seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', schema=generate2020And2010Segment2Schema())
@@ -33,6 +31,29 @@ seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', sch
 geo_df_2000 = gen_schema(spark.read.text(f"{main_path}/p3_data_2000/GeoHeader"), spark, 2000).drop("CIFSN").drop("CHARITER")
 seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=generateSegment1Schema()).drop("CIFSN").drop("CHARITER")
 seg2_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment2', sep=',', schema=generate2000Segment2Schema()).drop("CIFSN").drop("CHARITER")
+
+filename = './specified_columns/columns_file.txt'
+geo_df = select_specified_columns(geo_df, filename)
+seg1_df = select_specified_columns(seg1_df, filename)
+seg2_df = select_specified_columns(seg2_df, filename)
+seg3_df = select_specified_columns(seg3_df, filename)
+
+geo_df_2010 = select_specified_columns(geo_df_2010, filename)
+seg1_df_2010 = select_specified_columns(seg1_df_2010, filename)
+seg2_df_2010 = select_specified_columns(seg2_df_2010, filename)
+
+geo_df_2000 = select_specified_columns(geo_df_2000, filename)
+seg1_df_2000 = select_specified_columns(seg1_df_2000, filename)
+seg2_df_2000 = select_specified_columns(seg2_df_2000, filename)
+
+link_cols = ["FILEID", "STUSAB", "LOGRECNO"]
+combined_df_2020 = geo_df.join(seg1_df, link_cols).join(seg2_df, link_cols).join(seg3_df, link_cols)
+combined_df_2010 = geo_df.join(seg1_df_2010, link_cols).join(seg2_df_2010, link_cols)
+combined_df_2000 = geo_df.join(seg1_df_2000, link_cols).join(seg2_df_2000, link_cols)
+
+combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True).show()
+
+
 
 # df_2000 = combine2000(geo_df_2000, seg1_df_2000, seg2_df_2000)
 # print(seg2_df.filter(col(geo_df.columns[1])=='US').head())

@@ -4,22 +4,17 @@ from pyspark.sql.types import StructType, StructField, StringType
 # Start Spark session
 # spark = SparkSession.builder.appName("FixedWidthRead").getOrCreate()
 
-geo_column_dict_2010 = {}
-with open("data/2010-geoheader.txt") as file:
-    for line in file:
-        key_value = line.split(',')
-        geo_column_dict_2010[key_value[0]] = int(key_value[1].strip())
-schema_2010 = StructType([StructField(key, StringType(), True) for key in geo_column_dict_2010.keys()])
-
-geo_column_dict_2000 = {}
-with open("data/2000-geoheader.txt") as file:
-    for line in file:
-        try:
+def generate_dict(filename):
+    c_dict = {}
+    with open(filename) as file:
+        for line in file:
             key_value = line.split(',')
-            geo_column_dict_2000[key_value[0]] = int(key_value[1].strip())
-        except:
-            break
-schema_2000 = StructType([StructField(key, StringType(), True) for key in geo_column_dict_2000.keys()])
+            c_dict[key_value[0]] = int(key_value[1].strip())
+    schema = StructType([StructField(key, StringType(), True) for key in c_dict.keys()])
+    return c_dict, schema
+
+geo_column_dict_2010, schema_2010 = generate_dict("data/2010-geoheader.txt")
+geo_column_dict_2000, schema_2000 = generate_dict("data/2000-geoheader.txt")
 
 # Define a function to split each line by byte width into columns
 def split_fixed_width(line: str, pairs):

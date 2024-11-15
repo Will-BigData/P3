@@ -6,11 +6,9 @@ def select_specified_columns(df, columns_file):
     # Step 1: Read the list of specified columns
     with open(columns_file, "r") as f:
         specified_columns = [line.strip() for line in f.readlines()]
-
+    
     # Step 2: Select only the specified columns from the input DataFrame
-    df_selected = df.select(*specified_columns)
-
-    df_selected.show()
+    df_selected = df.select(*list(set(specified_columns) & set(df.columns)))
 
     return df_selected
 
