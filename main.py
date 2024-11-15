@@ -47,9 +47,9 @@ seg1_df_2000 = select_specified_columns(seg1_df_2000, filename)
 seg2_df_2000 = select_specified_columns(seg2_df_2000, filename)
 
 link_cols = ["FILEID", "STUSAB", "LOGRECNO"]
-combined_df_2020 = geo_df.join(seg1_df, link_cols).join(seg2_df, link_cols).join(seg3_df, link_cols)
-combined_df_2010 = geo_df.join(seg1_df_2010, link_cols).join(seg2_df_2010, link_cols)
-combined_df_2000 = geo_df.join(seg1_df_2000, link_cols).join(seg2_df_2000, link_cols)
+combined_df_2020 = geo_df.join(seg1_df, link_cols).join(seg2_df, link_cols).join(seg3_df, link_cols).withColumn("YEAR", lit(2020))
+combined_df_2010 = geo_df.join(seg1_df_2010, link_cols).join(seg2_df_2010, link_cols).withColumn("YEAR", lit(2010))
+combined_df_2000 = geo_df.join(seg1_df_2000, link_cols).join(seg2_df_2000, link_cols).withColumn("YEAR", lit(2000))
 
 combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True).show()
 
