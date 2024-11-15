@@ -51,7 +51,7 @@ combined_df_2020 = geo_df.join(seg1_df, link_cols).join(seg2_df, link_cols).join
 combined_df_2010 = geo_df.join(seg1_df_2010, link_cols).join(seg2_df_2010, link_cols).withColumn("YEAR", lit(2010))
 combined_df_2000 = geo_df.join(seg1_df_2000, link_cols).join(seg2_df_2000, link_cols).withColumn("YEAR", lit(2000))
 
-combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True).show()
+final_data = combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True)
 
 
 
