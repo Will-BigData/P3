@@ -1,6 +1,6 @@
 from pathlib import Path
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, lit
 from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema, generate2020And2010Segment2Schema, generateSegment3Schema, generate2000Segment2Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
