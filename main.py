@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import lit
-from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema, generate2020And2010Segment2Schema, generate2000Segment2Schema
+from schemaGenerator import generate2020GeoSegmentSchema, generateSegmentSchema, generate2000Segment2Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
@@ -16,17 +16,19 @@ spark_builder.appName("p3-census").config("spark.master", "local[*]")
 
 spark: SparkSession = spark_builder.getOrCreate()
 sc = spark.sparkContext
+segment1_schema = generateSegmentSchema('data/2020_FieldNames_Segment1.csv')
+segment2_schema = generateSegmentSchema('data/2020_FieldNames_Segment2.csv')
 
 geo_df = spark.read.csv(f'{main_path}/p3_data_2020/GeoHeader', sep='|', schema=generate2020GeoSegmentSchema())
-seg1_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment1', sep='|', schema=generateSegment1Schema())
-seg2_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment2', sep='|', schema=generate2020And2010Segment2Schema())
+seg1_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment1', sep='|', schema=segment1_schema)
+seg2_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment2', sep='|', schema=segment2_schema)
 
 geo_df_2010 = gen_schema(spark.read.text(f"{main_path}/p3_data_2010/GeoHeader"), spark, 2010)
-seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=generateSegment1Schema())
-seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', schema=generate2020And2010Segment2Schema())
+seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=segment1_schema)
+seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', schema=segment2_schema)
 
 geo_df_2000 = gen_schema(spark.read.text(f"{main_path}/p3_data_2000/GeoHeader"), spark, 2000)
-seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=generateSegment1Schema())
+seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=segment1_schema)
 seg2_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment2', sep=',', schema=generate2000Segment2Schema())
 
 filename = './specified_columns/columns_file.txt'
