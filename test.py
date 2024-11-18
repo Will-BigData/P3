@@ -16,6 +16,6 @@ spark_builder.appName("p3-census").config("spark.master", "local[*]")
 spark: SparkSession = spark_builder.getOrCreate()
 sc = spark.sparkContext
 
-data = spark.read.parquet(f"{output_path}/output")
+data = spark.read.parquet(output_path)
 
-data.show()
+data.select("UR").distinct().show()
