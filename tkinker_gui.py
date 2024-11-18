@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
-from pathlib import Path
-from tkinter_gui.layout import create_scrollable_frame, create_save_button, create_selected_count_label
+from tkinter_gui.layout import create_scrollable_frame, create_selected_count_label
 from tkinter_gui.event_handlers import update_selected_count, on_mouse_wheel
 
 def create_gui(columns, read_data_func, generate_parquet_file_callback):
