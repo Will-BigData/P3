@@ -2,7 +2,7 @@ group 3 data analysis questions:
 
 
 Michael
-1. What are the land and water areas (AREALAND, AREAWATR) of different geographic divisions, and how do they compare?
+1. What are the land and water areas (AREALAND, AREAWATR) of different geographic divisions, and how do they compare across 2000 2010 and 2020 census ?
 
 
 how this could be done:
