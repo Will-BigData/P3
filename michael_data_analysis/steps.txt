@@ -2,9 +2,7 @@
 
 2. create "fn_desc.csv" that matches the fields names group 1 extracted with its description
 
-3. put "p3_output" folder in Hadoop (contains the field data extracted from 2000, 2010, 2020 census) (this has extra columns since i created new columns for the data in power BI)
+3. put "original_p3_data" folder in Hadoop (contains the original field data extracted from 2000, 2010, 2020 census)
 
-4. put "original_p3_data" folder in Hadoop (contains the original field data extracted from 2000, 2010, 2020 census
-
-5.put "field_names.csv" in Hadoop
+4.put "field_names.csv" in Hadoop
 
