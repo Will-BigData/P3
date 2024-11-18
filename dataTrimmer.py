@@ -2,11 +2,7 @@ import os
 from pathlib import Path
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import lit
 from dotenv import load_dotenv
-from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema, generate2020And2010Segment2Schema, generate2000Segment2Schema
-from pygen_census import gen_schema
-from specified_columns.select_specified_columns import select_specified_columns
 
 from tkinker_gui import create_gui
 from tkinter import messagebox
