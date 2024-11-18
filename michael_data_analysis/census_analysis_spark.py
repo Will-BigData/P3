@@ -48,6 +48,23 @@ df1 = spark.read.parquet(path_2010)
 #read all parquet files in the 2020 folder
 df2 = spark.read.parquet(path_2020)
 
+# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+df0 = df0.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
+# Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
+df0 = df0.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
+
+# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+df1 = df1.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
+# Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
+df1 = df1.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
+
+
+# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+df2 = df2.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
+# Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
+df2 = df2.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
+
+
 #land_water analyze for 2000, 2100, and 2200 based on state
 df0_r = analyze_land_water_areas(df0, "STUSAB")
 df1_r = analyze_land_water_areas(df1, "STUSAB")
@@ -66,6 +83,8 @@ df = df.union(df2_r)
 
 #print data frame schema
 df.printSchema()
+
+
 
 df.coalesce(1).write.csv("/myp3/output/state_land_water_analysis", header=True, mode="overwrite")
 
