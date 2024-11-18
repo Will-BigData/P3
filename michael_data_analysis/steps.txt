@@ -1,0 +1,8 @@
+1. create "field_names.csv" that has the fields names that group 1 extracted
+
+2. create "fn_desc.csv" that matches the fields names group 1 extracted with its description
+
+3. put "p3_output" folder in Hadoop (contains the field data extracted from 2000, 2010, 2020 census)
+
+4.put "field_names.csv" in Hadoop, will be used for schema.
+
