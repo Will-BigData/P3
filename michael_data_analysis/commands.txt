@@ -1,0 +1,11 @@
+#one time
+hdfs dfs -mkdir -p /myp3/input
+hdfs dfs -mkdir /myp3/output
+hdfs dfs -put /mnt/c/Users/micha/Desktop/p3_output /myp3/input
+hdfs dfs -put /mnt/c/Users/micha/Desktop/project_3/P3/michael_data_analysis/field_names.csv /myp3/input
+
+
+
+cp -r /mnt/c/Users/micha/Desktop/project_3/P3/michael_data_analysis .
+
+
