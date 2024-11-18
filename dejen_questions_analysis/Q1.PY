@@ -8,7 +8,7 @@ from pyspark.sql.functions import sum, lit
 spark = SparkSession.builder.appName("CensusRaceAnalysis").getOrCreate()
 
 # path for data
-base_path = "hdfs:///user/dejtes/census_data_parquet"
+base_path = "hdfs:///user/dirname/census_data_parquet"
 
 
 df_2000 = spark.read.parquet(f"{base_path}/YEAR=2000")
@@ -42,4 +42,21 @@ def calculate_state_race_population(df, year):
     )
 
     return total_population_by_state.withColumn("Year", lit(year))
+
+# Perforem the analysis for all the years
+
+result_2000 = calculate_state_race_population(df_2000, 2000)
+result_2010 = calculate_state_race_population(df_2010, 2010)
+result_2020 = calculate_state_race_population(df_2020, 2020)
+
+
+# Combine the results
+final_result = result_2000.union(result_2010).union(result_2020)
+
+final_result.show()
+
+#save the combined result to HDFS to a singel file
+final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1")
+
+
     
