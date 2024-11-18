@@ -1,6 +1,7 @@
 # 2. WHAT ARE THE TOP 10 COUNTIES WITH THE HIGHEST DIVERSITY INDEX, AND HOW DOES IT CHANGE FROM 2000-2020?
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, lit, pow, when, sum
 
 
 # Initialize Spark Session
@@ -29,3 +30,9 @@ columns_of_interest = [
     "P0010008",   
     "P0010009",
 ]
+
+# function to filter for county level data
+
+def filter_county_level_data(df):
+    filtered_df = df.filter(col("SUMLEV") == "050").select(*columns_of_interest)
+    return filtered_df
