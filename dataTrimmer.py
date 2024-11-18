@@ -32,6 +32,13 @@ def save_selected_columns_to_file(selected_columns):
 
 def save_final_data_to_parquet(final_data):
     final_data.write.mode("overwrite").parquet(f"{trimmed_path}/p3_data_combined_parquet")
+    command = f"hdfs dfs -rm {trimmed_path}/p3_data_combined_parquet/_SUCCESS"
+    result = os.system(command)
+
+    if result == 0:
+        print("SUCCESS")
+    else:
+        print("oof")
 
 def generate_parquet_file(column_checkboxes, read_data_func):
     selected_columns = [column for column, checkbox in column_checkboxes.items() if checkbox.get()]
