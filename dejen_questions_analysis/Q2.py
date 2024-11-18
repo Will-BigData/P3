@@ -36,3 +36,19 @@ columns_of_interest = [
 def filter_county_level_data(df):
     filtered_df = df.filter(col("SUMLEV") == "050").select(*columns_of_interest)
     return filtered_df
+
+
+# function to calculate diversity index
+
+def calculate_diversity_index(df, year):
+    county_df = filter_county_level_data(df)
+
+    county_df = county_df.withColumn(
+        "Validate_Population",
+        when(col("P0010001") > 0, True).otherwise(False)
+    )
+        # Debug purposes
+    valid_count = county_df.filter(col("Valid_Population") == True).count()
+    print(f"Valid counties for diversity calculation in {year}: {valid_count}")
+    
+    
