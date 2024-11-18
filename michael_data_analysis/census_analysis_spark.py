@@ -30,26 +30,13 @@ def analyze_land_water_areas(df: DataFrame, geographic_division: str) -> DataFra
 # initialize a Spark Session
 spark = SparkSession.builder.appName("census analysis").getOrCreate()
 
-
-#field_names.csv path
-fn_path = "/myp3/input/field_names.csv"
-
-#read the csv as an RDD
-rdd = spark.sparkContext.textFile(fn_path)
-
-#turn rdd to list
-names = rdd.collect()
-
-#remove first element
-names.pop(0)
-
-#2000 year census path from the 
+#2000 year census path
 path_2000 = "/myp3/input/original_p3_data/YEAR=2000" 
 
-#2010 year census path from the 
+#2010 year census path
 path_2010 = "/myp3/input/original_p3_data/YEAR=2010" 
 
-#2020 year census path from the 
+#2020 year census path
 path_2020 = "/myp3/input/original_p3_data/YEAR=2020" 
 
 #read all parquet files in the 2000 folder
@@ -60,6 +47,23 @@ df1 = spark.read.parquet(path_2010)
 
 #read all parquet files in the 2020 folder
 df2 = spark.read.parquet(path_2020)
+
+# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+df0 = df0.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
+# Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
+df0 = df0.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
+
+# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+df1 = df1.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
+# Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
+df1 = df1.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
+
+
+# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+df2 = df2.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
+# Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
+df2 = df2.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
+
 
 #land_water analyze for 2000, 2100, and 2200 based on state
 df0_r = analyze_land_water_areas(df0, "STUSAB")
@@ -80,4 +84,38 @@ df = df.union(df2_r)
 #print data frame schema
 df.printSchema()
 
-df.coalesce(1).write.csv("/myp3/output/", header=True, mode="overwrite")
+
+
+df.coalesce(1).write.csv("/myp3/output/state_land_water_analysis", header=True, mode="overwrite")
+
+
+from pyspark.sql.functions import abs, col, lit, sum
+
+# Pivot the data to create year columns for Land_to_Water_Ratio
+pivoted_ratio_df = df.groupBy("STUSAB").pivot("year").agg(
+    sum("Land_to_Water_Ratio").alias("Land_to_Water_Ratio")
+)
+
+# Calculate absolute changes in Land_to_Water_Ratio between years
+pivoted_ratio_df = pivoted_ratio_df.withColumn(
+    "Change_2000_2010", abs(col("2010") - col("2000"))
+).withColumn(
+    "Change_2010_2020", abs(col("2020") - col("2010"))
+).withColumn(
+    "Change_2000_2020", abs(col("2020") - col("2000"))
+)
+
+# Calculate the total change in Land_to_Water_Ratio across all years
+pivoted_ratio_df = pivoted_ratio_df.withColumn(
+    "Total_Change",
+    col("Change_2000_2010") + col("Change_2010_2020") + col("Change_2000_2020")
+)
+
+# Order by the total change and select the top 10 states
+top_states_ratio = pivoted_ratio_df.orderBy(col("Total_Change").desc()).limit(10)
+
+# Show the top 10 states with the most Land_to_Water_Ratio change
+top_states_ratio.show()
+
+# Write the results to a CSV file
+top_states_ratio.coalesce(1).write.csv("/myp3/output/top_states_ratio", header=True, mode="overwrite")
