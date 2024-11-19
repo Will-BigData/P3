@@ -58,5 +58,4 @@ final_result.show()
 #save the combined result to HDFS to a singel file
 final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1")
 
-
-    
+spark.stop()

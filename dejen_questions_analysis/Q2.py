@@ -87,7 +87,8 @@ top_10_2010 = top_10_counties_by_diversity_index(diversity_2010)
 top_10_2020 = top_10_counties_by_diversity_index(diversity_2020)
 
 #combine the results
-
 final_top_10 = top_10_2000.union(top_10_2010).union(top_10_2020)
 
 final_top_10.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q2")
+
+spark.stop()
