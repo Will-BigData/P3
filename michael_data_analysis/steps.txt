@@ -6,6 +6,18 @@
 
 4.put "field_names.csv" in Hadoop
 
-5. find out the unit of measurement for AREALAND and AREADWATER
+5. check if data is extracted correctly:
+	how: sum POP100 by state 
+	check: 2020 New Mexico Population = 2,117,522 (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
+	check: 2020 Texas Population = 29,145,505 (https://data.census.gov/profile/Texas?g=040XX00US48)
+	myResult with powerBI: 2020 New Mexico Population = 107,927,865
+	myResult with powerBI: 2020 Texas Population = 1,511,413,770
+
+
+6. find out the unit of measurement for AREALAND and AREADWATER
 	ANSWSER: it is probably square meter (m²)
 	CHECK: convert New Mexico AREALAND TO square miles for the year 2020 and see if it equals 121,280.1 square miles (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
+	result: does not match
+	reason 1: AREALAND and AREAWATER might use sqare meter as unit of measurement
+	reason 2: data wasn't extracted correctly
+
