@@ -12,7 +12,7 @@
 	check: 2020 Texas Population = 29,145,505 (https://data.census.gov/profile/Texas?g=040XX00US48)
 	myResult with powerBI: 2020 New Mexico Population = 2,117,522
 	myResult with powerBI: 2020 Texas Population = 29,145,505
-	conclusion: data is extracted correctly. the way the data is formatted it includes records were the total is already calculated for you. so max(col_name) instead of sum(col_name)
+	data is extracted correctly for these columns. the way the data is formatted it includes records were the total is already calculated for you. so max(col_name) instead of sum(col_name)
 
 
 
@@ -21,5 +21,4 @@
 	CHECK: convert New Mexico AREALAND TO square miles for the year 2020 and see if it equals 121,280.1 square miles (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
 	result: does not match
 	reason 1: AREALAND and AREAWATER might use sqare meter as unit of measurement
-	reason 2: data wasn't extracted correctly
 

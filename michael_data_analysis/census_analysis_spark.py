@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import sum, col,lit
+from pyspark.sql.functions import sum, col,lit,max
 
 def analyze_land_water_areas(df: DataFrame, geographic_division: str) -> DataFrame:
     """
@@ -14,8 +14,8 @@ def analyze_land_water_areas(df: DataFrame, geographic_division: str) -> DataFra
     """
     # Group by the specified geographic division and calculate total land and water areas
     result_df = df.groupBy(geographic_division).agg(
-        sum(col("AREALAND").cast("float")).alias("Total_Land_Area"),
-        sum(col("AREAWATR").cast("float")).alias("Total_Water_Area")
+        max(col("AREALAND").cast("double")).alias("Total_Land_Area"),
+        max(col("AREAWATR").cast("double")).alias("Total_Water_Area")
     )
 
     # Add comparison columns: Land-to-Water Ratio and Land-Water Difference
@@ -48,7 +48,7 @@ df1 = spark.read.parquet(path_2010)
 #read all parquet files in the 2020 folder
 df2 = spark.read.parquet(path_2020)
 
-# Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
+""" # Convert AREALAND from square meters to square miles by multiplying by 0.0000003861
 df0 = df0.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
 # Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
 df0 = df0.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
@@ -63,7 +63,7 @@ df1 = df1.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
 df2 = df2.withColumn("AREALAND", col("AREALAND") * 0.0000003861)
 # Convert AREAWATR from square meters to square miles by multiplying by 0.0000003861
 df2 = df2.withColumn("AREAWATR", col("AREAWATR") * 0.0000003861)
-
+ """
 
 #land_water analyze for 2000, 2100, and 2200 based on state
 df0_r = analyze_land_water_areas(df0, "STUSAB")
