@@ -52,24 +52,3 @@ combined_df_2000 = geo_df_2000.join(seg1_df_2000, link_cols).join(seg2_df_2000, 
 final_data = combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True)
 
 final_data.write.partitionBy("YEAR", "STUSAB").parquet(output_path)
-
-if __name__ == "__main__":
-
-    print(f"Script Name: {sys.argv[0]}")
-
-    # Other arguments
-    """ columns = []
-    if len(sys.argv) > 1:
-        columns = sys.argv[1:] """
-
-    file_path = sys.argv[1]
-
-    try:
-        with open(file_path, 'r') as file:
-            specified_columns = [line.strip() for line in file.readlines()]
-
-        
-        geo_df.select(specified_columns).show()
-
-    except FileNotFoundError as e:
-        print(e.message) 
