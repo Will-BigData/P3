@@ -72,5 +72,22 @@ def calculate_diversity_index(df, year):
 
     return diversity_df.select("STUSAB", "COUNTY", "Diversity_Index", "Year")
 
+# Function to find top 10 counties by diversity index
+def top_10_counties_by_diversity_index(df):
+    print(f"Total counties processed: {df.count()}")
+    return df.orderBy(col("Diversity_Index").desc()).limit(10)
+   
 
+diversity_2000 = calculate_diversity_index(df_2000, 2000)
+diversity_2010 = calculate_diversity_index(df_2010, 2010)
+diversity_2020 = calculate_diversity_index(df_2020, 2020)
 
+top_10_2000 = top_10_counties_by_diversity_index(diversity_2000)
+top_10_2010 = top_10_counties_by_diversity_index(diversity_2010)
+top_10_2020 = top_10_counties_by_diversity_index(diversity_2020)
+
+#combine the results
+
+final_top_10 = top_10_2000.union(top_10_2010).union(top_10_2020)
+
+final_top_10.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q2")
