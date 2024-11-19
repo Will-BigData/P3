@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import lit
+from pyspark.sql.functions import lit, max, sum, format_number, col, count
 from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema, generate2020And2010Segment2Schema, generate2000Segment2Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
@@ -18,4 +18,14 @@ sc = spark.sparkContext
 
 data = spark.read.parquet(output_path)
 
-data.select("UR").distinct().show()
+
+
+#data = data.select("YEAR", "STUSAB", "SUMLEV", col("POP100").cast("int"), "REGION", "COUNTY")
+data = data.select("SUMLEV", col("POP100").cast("int"))
+total = data.count()
+print(total)
+data = data.groupBy("SUMLEV").count().orderBy("count", ascending=False).withColumn("Percent", format_number((col("count")*100/total),4))
+
+#data = data.groupBy("YEAR", "STUSAB").agg(max("POP100").alias("Largest"), (sum("POP100")).alias("Total")).withColumn("Total", format_number("Total", 0))
+
+data.show(n=data.count())
