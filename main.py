@@ -4,9 +4,9 @@ from schemaGenerator import generate2020GeoSegmentSchema, generateSegmentSchema,
 from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
-import sys
+
 from specified_columns.select_specified_columns import select_specified_columns
-load_dotenv()
+load_dotenv(override=True)
 
 main_path = os.getenv('FOLDER_PATH', '')
 output_path = os.getenv("OUTPUT_PATH", "")
@@ -33,14 +33,17 @@ seg2_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment2', sep=',', sch
 
 filename = './specified_columns/columns_file.txt'
 geo_df = select_specified_columns(geo_df, filename)
+geo_df = geo_df.where(geo_df.SUMLEV != 750)
 seg1_df = select_specified_columns(seg1_df, filename)
 seg2_df = select_specified_columns(seg2_df, filename)
 
 geo_df_2010 = select_specified_columns(geo_df_2010, filename)
+geo_df_2010 = geo_df_2010.where(geo_df_2010.SUMLEV != 750)
 seg1_df_2010 = select_specified_columns(seg1_df_2010, filename)
 seg2_df_2010 = select_specified_columns(seg2_df_2010, filename)
 
 geo_df_2000 = select_specified_columns(geo_df_2000, filename)
+geo_df_2000 = geo_df_2000.where(geo_df_2000.SUMLEV != 750)
 seg1_df_2000 = select_specified_columns(seg1_df_2000, filename)
 seg2_df_2000 = select_specified_columns(seg2_df_2000, filename)
 
@@ -51,4 +54,6 @@ combined_df_2000 = geo_df_2000.join(seg1_df_2000, link_cols).join(seg2_df_2000, 
 
 final_data = combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True)
 
-final_data.write.partitionBy("YEAR", "STUSAB").parquet(output_path)
+final_data.write.parquet(output_path)
+
+# final_data.write.partitionBy("YEAR", "STUSAB").parquet(output_path)
