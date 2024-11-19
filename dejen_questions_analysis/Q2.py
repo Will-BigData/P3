@@ -52,3 +52,25 @@ def calculate_diversity_index(df, year):
     print(f"Valid counties for diversity calculation in {year}: {valid_count}")
     
     
+    # Add Diversity Index calculation
+    diversity_df = county_df.withColumn(
+        "Diversity_Index",
+        lit(1) - (
+            pow(col("P0010003") / col("P0010001"), 2) +
+            pow(col("P0010004") / col("P0010001"), 2) +
+            pow(col("P0010005") / col("P0010001"), 2) +
+            pow(col("P0010006") / col("P0010001"), 2) +
+            pow(col("P0010007") / col("P0010001"), 2) +
+            pow(col("P0010008") / col("P0010001"), 2) +
+            pow(col("P0010009") / col("P0010001"), 2)
+        )
+    )
+
+    diversity_df = diversity_df.withColumn("Year", lit(year))
+
+    diversity_df =  diversity_df.filter(col("Diversity_Index").isNotNull())
+
+    return diversity_df.select("STUSAB", "COUNTY", "Diversity_Index", "Year")
+
+
+
