@@ -6,6 +6,30 @@
 
 4.put "field_names.csv" in Hadoop
 
-5. find out the unit of measurement for AREALAND and AREADWATER
+5. check if data is extracted correctly:
+	how: max( POP100) by state 
+	check: 2020 New Mexico Population = 2,117,522 (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
+	check: 2020 Texas Population = 29,145,505 (https://data.census.gov/profile/Texas?g=040XX00US48)
+	myResult with powerBI: 2020 New Mexico Population = 2,117,522
+	myResult with powerBI: 2020 Texas Population = 29,145,505
+	data is extracted correctly for these columns. the way the data is formatted it includes records were the total is already calculated for you. so max(col_name) instead of sum(col_name). Or use SUMLEVL column
+
+5. SUMLEVEL = 40 doesn't have all the AREALAND and AREAWATER state data for 2020 so just focus on the 2000 and 2010 cences data for this analysis. 
+
+6. calculate total AREALAND and AREAWATER by state.
+
+7. calulate the land to water ratio and the land to water difference 
+
+8. find out the unit of measurement for AREALAND and AREAWATER and check if data calulations correspond with the census data
 	ANSWSER: it is probably square meter (m²)
-	CHECK: convert New Mexico AREALAND TO square miles for the year 2020 and see if it equals 121,280.1 square miles (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
+	How to check example: convert New Mexico AREALAND TO square miles for the year 2010 (SUMLEVEL = 40 doesn't have all the AREALAND and AREAWATER state data for 2020)and see if it is close to 121,280.1 square miles (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
+	CHECK: 2020 New Mexico AREALAND = 121,280.1 square miles, 2020 new mexico AREAWATER = 280.9 square miles
+	CHECK: 2020 Texas AREALAND = 261,193.9 square miles, 2020 Texas AREAWATER = 7,330.9 square mile
+	CHECK: 2020 Oklahoma AREALAND = 68,577.8 square miles, 2020  Oklahoma AREAWATER =  1,302.7  square miles	
+	pyspark result: 2010 New Mexico AREALAND = 121,297.5 square miles, 2010 new mexico AREAWATER = 292.1 square miles
+	pyspark result: 2010 Texas AREALAND = 261,230.2 square miles, 2010 Texas AREAWATER = 7,364.7 square miles
+	pyspark result: 2010 Oklahoma AREALAND =  68,594.5 square miles, 2010 Oklahoma AREAWATER =  1,303.9 square miles
+
+	calculations are close, difference might be due to change over time from 2010 to 2020.
+	
+9. find the top 10 states with the biggest difference in land to water ratio from year 2000 to 2010.
