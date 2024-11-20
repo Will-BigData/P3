@@ -24,7 +24,7 @@
 	ANSWSER: it is probably square meter (m²)
 	How to check example: convert New Mexico AREALAND TO square miles for the year 2010 (SUMLEVEL = 40 doesn't have all the AREALAND and AREAWATER state data for 2020)and see if it is close to 121,280.1 square miles (https://data.census.gov/profile/New_Mexico?g=040XX00US35)
 	CHECK: 2020 New Mexico AREALAND = 121,280.1 square miles, 2020 new mexico AREAWATER = 280.9 square miles
-	CHECK: 2020 Texas AREALAND = 261,193.9 square miles, 2020 new mexico AREAWATER = 7,330.9 square mile
+	CHECK: 2020 Texas AREALAND = 261,193.9 square miles, 2020 Texas AREAWATER = 7,330.9 square mile
 	CHECK: 2020 Oklahoma AREALAND = 68,577.8 square miles, 2020  Oklahoma AREAWATER =  1,302.7  square miles	
 	pyspark result: 2010 New Mexico AREALAND = 121,297.5 square miles, 2010 new mexico AREAWATER = 292.1 square miles
 	pyspark result: 2010 Texas AREALAND = 261,230.2 square miles, 2010 Texas AREAWATER = 7,364.7 square miles
