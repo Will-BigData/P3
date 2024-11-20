@@ -3,6 +3,7 @@
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import sum, lit
+from pyspark.sql.window import Window
 
 # Initialize Spark Session
 spark = SparkSession.builder.appName("CensusRaceAnalysis").getOrCreate()
@@ -53,9 +54,29 @@ result_2020 = calculate_state_race_population(df_2020, 2020)
 # Combine the results
 final_result = result_2000.union(result_2010).union(result_2020)
 
+# Windows specification fro cumulative sums by race across all states
+window_spec = Window.partitionBy("STUSAB").orderBy("Year")
+
+# Add cululative population columns for each race
+final_result = final_result.withColumn(
+    "Cumulative_White_Alone", sum("White_Alone").over(window_spec)
+).withColumn(
+    "Cumulative_Black_Alone", sum("Black_Alone").over(window_spec)
+).withColumn(
+    "Cumulative_American_Indian_Alone", sum("American_Indian_Alone").over(window_spec)
+).withColumn(
+    "Cumulative_Asian_Alone", sum("Asian_Alone").over(window_spec)
+).withColumn(
+    "Cumulative_Native_Hawaiian_Alone", sum("Native_Hawaiian_Alone").over(window_spec)
+).withColumn(
+    "Cumulative_Some_Other_Race", sum("Some_Other_Race").over(window_spec)
+).withColumn(
+    "Cumulative_Two_or_More_Races", sum("Two_or_More_Races").over(window_spec)
+)
+
 final_result.show()
 
 #save the combined result to HDFS to a singel file
-final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1")
+final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1_with_cumulative")
 
 spark.stop()
