@@ -19,8 +19,8 @@ def analyze_land_water_areas(df: DataFrame, geographic_division: str) -> DataFra
 
     # Group by the specified geographic division and year, and calculate total land and water areas
     result_df = filtered_df.groupBy(geographic_division, "year").agg(
-        sum(col("AREALAND").cast("double")).alias("Total_Land_Area"),
-        sum(col("AREAWATR").cast("double")).alias("Total_Water_Area")
+        sum(col("AREALAND")).alias("Total_Land_Area"),
+        sum(col("AREAWATR")).alias("Total_Water_Area")
     )
 
     # Add comparison columns: Land-to-Water Ratio and Land-Water Difference
@@ -48,12 +48,31 @@ df1 = spark.read.parquet(path_2010).withColumn("year", lit(2010))
 # Union all data
 df = df0.union(df1) #.union(df2)
 
-# Convert AREALAND and AREAWATR from square meters to square miles
-df = df.withColumn("AREALAND", col("AREALAND").cast("double") * 0.0000003861)
-df = df.withColumn("AREAWATR", col("AREAWATR").cast("double") * 0.0000003861)
+# Convert AREALAND and AREAWATR to float
+df = df.withColumn("AREALAND", col("AREALAND").cast("float"))
+df = df.withColumn("AREAWATR", col("AREAWATR").cast("float"))
+
+# square meters to square miles conversion
+conversion_factor = 3.861e-7
 
 # Analyze land and water areas based on state and year
 df_result = analyze_land_water_areas(df, "STUSAB")
+
+#column that has total Land Area in miles
+df_result = df_result.withColumn("TLA_miles", col("Total_Land_Area") * conversion_factor)
+#column that has total Water Area in miles
+df_result = df_result.withColumn("TWA_miles", col("Total_Water_Area") * conversion_factor)
+
+
+#making a table for the result
+df_result.createOrReplaceTempView("df_result")
+
+#select states New Mexico, Texas, and Oklahoma from the year 2010
+test_df = spark.sql("SELECT  STUSAB, TLA_miles, TWA_miles, year FROM df_result WHERE (STUSAB = 'NM' OR STUSAB = 'TX' OR STUSAB = 'OK')  AND year = 2010 ")
+
+#display New Mexico, Texas, and Oklahoma AREALAND and AREAWATR in sqaure miles for testing my results
+test_df.show()
+
 
 
 # Print DataFrame schema
@@ -62,3 +81,21 @@ df_result.printSchema()
 # Save the results to the output path
 df_result.coalesce(1).write.csv("/myp3/output/state_land_water_analysis", header=True, mode="overwrite")
 
+# Pivot the data to create year columns for Land_to_Water_Ratio
+pivoted_ratio_df = df_result.groupBy("STUSAB").pivot("year").agg(
+    sum("Land_to_Water_Ratio")
+)
+
+# Calculate absolute changes in Land_to_Water_Ratio between years
+pivoted_ratio_df = pivoted_ratio_df.withColumn(
+    "Change_2000_2010", abs(col("2010") - col("2000"))
+)
+
+# Order by the total change and select the top 10 states
+top_states_ratio = pivoted_ratio_df.orderBy(col("Change_2000_2010").desc()).limit(10)
+
+# Show the top 10 states with the most Land_to_Water_Ratio change
+top_states_ratio.show()
+
+# Write the results to a CSV file
+top_states_ratio.coalesce(1).write.csv("/myp3/output/top_states_ratio", header=True, mode="overwrite")

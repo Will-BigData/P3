@@ -1,0 +1,4 @@
+questions being answered
+1.) finding out the change in land to water area by state over time (2000 to 2010) using ratio.
+ 
+2.) use land and water area by state to order states by largest to smallest.
