@@ -1,6 +1,5 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import lit, max, sum, format_number, col, count
-from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema, generate2020And2010Segment2Schema, generate2000Segment2Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
