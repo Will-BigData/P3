@@ -54,6 +54,6 @@ combined_df_2000 = geo_df_2000.join(seg1_df_2000, link_cols).join(seg2_df_2000, 
 
 final_data = combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True)
 
-final_data.write.parquet(output_path)
+final_data.write.mode("overwrite").parquet(output_path)
 
 # final_data.write.partitionBy("YEAR", "STUSAB").parquet(output_path)
