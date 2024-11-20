@@ -1,0 +1,18 @@
+#one time 
+hdfs dfs -mkdir -p /myp3/input
+hdfs dfs -mkdir /myp3/output
+
+#put the original data that was extracted into hadoop
+hdfs dfs -put /mnt/c/Users/micha/Desktop/original_p3_data /myp3/input
+
+
+#put the field_names.csv into hadoop
+hdfs dfs -put /mnt/c/Users/micha/Desktop/project_3/P3/michael_data_analysis/field_names.csv /myp3/input
+
+#get my output data out of handoop and into this folder hadoop
+hdfs dfs -get /myp3/output/ /mnt/c/Users/micha/Desktop/project_3/P3/michael_data_analysis/
+
+
+cp -r /mnt/c/Users/micha/Desktop/project_3/P3/michael_data_analysis .
+
+
