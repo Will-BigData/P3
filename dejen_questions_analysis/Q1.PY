@@ -4,6 +4,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import sum, lit
 from pyspark.sql.window import Window
+from pyspark.sql.functions import format_string, lag, col
 
 # Initialize Spark Session
 spark = SparkSession.builder.appName("CensusRaceAnalysis").getOrCreate()
@@ -74,9 +75,35 @@ final_result = final_result.withColumn(
     "Cumulative_Two_or_More_Races", sum("Two_or_More_Races").over(window_spec)
 )
 
+# Define the list of races
+races = [
+    "White_Alone", 
+    "Black_Alone", 
+    "American_Indian_Alone", 
+    "Asian_Alone", 
+    "Native_Hawaiian_Alone", 
+    "Some_Other_Race", 
+    "Two_or_More_Races"
+]
+
+# Add percentage change columns for each race dynamically
+for race in races:
+    prev_col = f"Prev_{race}"
+    percent_change_col = f"{race}_Percent_Change"
+    
+    final_result = final_result.withColumn(
+        prev_col, lag(race).over(window_spec)
+    ).withColumn(
+        percent_change_col, 
+        ((col(race) - col(prev_col)) / col(prev_col)) * 100
+    ).withColumn(
+        percent_change_col, format_string("%.2f%%", col(percent_change_col))
+    )
+
+
 final_result.show()
 
 #save the combined result to HDFS to a singel file
-final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1_with_cumulative")
+final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1cumPer")
 
 spark.stop()
