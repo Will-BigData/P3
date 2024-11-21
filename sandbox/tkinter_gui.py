@@ -11,8 +11,10 @@ def create_gui(columns, read_data_func, generate_parquet_file_callback):
     selected_count_label = create_selected_count_label(root)
 
     column_checkboxes = {}
-    preselected_columns = ["FILEID", "STUSAB", "LOGRECNO"]
+
+    preselected_columns = ["FILEID", "STUSAB", "LOGRECNO", "YEAR", "SUMLEV"]
     
+    selected_count_label.config(text=f"Selected Fields: {len(preselected_columns)}")
     for column in columns:
         column_checkboxes[column] = tk.BooleanVar()
 
