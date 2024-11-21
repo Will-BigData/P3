@@ -18,7 +18,8 @@ df_2020 = spark.read.parquet(f"{base_path}/YEAR=2020")
 
 columns_of_interest = [
     "STUSAB",     
-    "SUMLEV",     
+    "SUMLEV",
+    "POP100",  
     "P0010003",   
     "P0010004",   
     "P0010005",   
@@ -28,11 +29,13 @@ columns_of_interest = [
     "P0010009",
 ]
 
-# Function to calculate total population by race at the state level
+# Function to calculate total population by race and overall population at the state level
 def calculate_state_race_population(df, year):
+    df = df.withColumn("POP100", col("POP100").cast("int"))
     state_level_df = df.filter(df["SUMLEV"] == "040").select(*columns_of_interest)
 
     total_population_by_state = state_level_df.groupBy("STUSAB").agg(
+        sum("POP100").alias("Total_Population"),
         sum("P0010003").alias("White_Alone"),
         sum("P0010004").alias("Black_Alone"),
         sum("P0010005").alias("American_Indian_Alone"),
@@ -57,6 +60,7 @@ window_spec = Window.partitionBy("STUSAB").orderBy("Year")
 
 # Define the list of races
 races = [
+    "Total_Population",
     "White_Alone", 
     "Black_Alone", 
     "American_Indian_Alone", 
