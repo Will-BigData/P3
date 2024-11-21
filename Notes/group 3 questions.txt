@@ -74,14 +74,11 @@ UATYPE (maybe)
 UR
 Using the population count we should see the total density and then find out which lived in an urban area versus a rural area and possibly show the differences between the 3 decades (or keep it at one decade).
 
-3. How does population density vary by state (e.g., city, county, state)?
+3. How does population density vary by state?
 Geoheader:
 POP100
-SUMLEV
-STATE (FIPS) (maybe)
-COUNTY (FIPS) (maybe)
-CONCIT (maybe - Consolidated City)
-Using the population count we should also be able to filter the total population by summary level - thinking state, city, and maybe county. 
+STATE (FIPS)
+Using the population count we should also be able to filter the total population by state per decade.
 
 James
 1. What is the total percentage of people of mixed race across the years? By state?
