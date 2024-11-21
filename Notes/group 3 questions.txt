@@ -74,7 +74,7 @@ UATYPE (maybe)
 UR
 Using the population count we should see the total density and then find out which lived in an urban area versus a rural area and possibly show the differences between the 3 decades (or keep it at one decade).
 
-3. How does population density vary by summary level (e.g., city, county, state)?
+3. How does population density vary by state (e.g., city, county, state)?
 Geoheader:
 POP100
 SUMLEV
