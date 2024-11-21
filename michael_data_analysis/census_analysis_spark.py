@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import sum, col, lit, max, abs
+from pyspark.sql.functions import sum, col, lit, abs, round, corr
 
 def analyze_land_water_areas(df: DataFrame, geographic_division: str) -> DataFrame:
     """
@@ -19,15 +19,16 @@ def analyze_land_water_areas(df: DataFrame, geographic_division: str) -> DataFra
 
     # Group by the specified geographic division and year, and calculate total land and water areas
     result_df = filtered_df.groupBy(geographic_division, "year").agg(
+        sum(col("POP100")).alias("Total_Population"),
         sum(col("AREALAND")).alias("Total_Land_Area"),
         sum(col("AREAWATR")).alias("Total_Water_Area")
     )
 
     # Add comparison columns: Land-to-Water Ratio and Land-Water Difference
     result_df = result_df.withColumn(
-        "Land_to_Water_Ratio", col("Total_Land_Area") / col("Total_Water_Area")
+        "Land_to_Water_Ratio",  round(col("Total_Land_Area") / col("Total_Water_Area"),2)
     ).withColumn(
-        "Land_Water_Difference", col("Total_Land_Area") - col("Total_Water_Area")
+        "Land_Water_Difference", round(col("Total_Land_Area") - col("Total_Water_Area"),2)
     )
 
     return result_df
@@ -52,17 +53,28 @@ df = df0.union(df1) #.union(df2)
 df = df.withColumn("AREALAND", col("AREALAND").cast("float"))
 df = df.withColumn("AREAWATR", col("AREAWATR").cast("float"))
 
+#convert POP1000 to int
+df = df.withColumn("POP100", col("POP100").cast("int"))
+
 # square meters to square miles conversion
 conversion_factor = 3.861e-7
 
 # Analyze land and water areas based on state and year
 df_result = analyze_land_water_areas(df, "STUSAB")
 
-#column that has total Land Area in miles
-df_result = df_result.withColumn("TLA_miles", col("Total_Land_Area") * conversion_factor)
-#column that has total Water Area in miles
-df_result = df_result.withColumn("TWA_miles", col("Total_Water_Area") * conversion_factor)
+#column that has total Land Area in miles and round the values in a column to two decimal places
+df_result = df_result.withColumn("TLA_miles", round(col("Total_Land_Area") * conversion_factor,2))
+#column that has total Water Area in miles  and round the values in a column to two decimal places
+df_result = df_result.withColumn("TWA_miles", round(col("Total_Water_Area") * conversion_factor,2))
 
+#make a column for TOTAL_AREA_MILES
+df_result = df_result.withColumn("TOTAL_AREA_MILES", round(col("TLA_miles")+col("TWA_miles"),2) )
+
+#make a column for Percent area, water
+df_result = df_result.withColumn("Percent area, water (%)", round(col("TWA_miles")/col("TOTAL_AREA_MILES")*100,2)  )
+
+
+df_result.show()
 
 #making a table for the result
 df_result.createOrReplaceTempView("df_result")
@@ -81,14 +93,17 @@ df_result.printSchema()
 # Save the results to the output path
 df_result.coalesce(1).write.csv("/myp3/output/state_land_water_analysis", header=True, mode="overwrite")
 
+
 # Pivot the data to create year columns for Land_to_Water_Ratio
 pivoted_ratio_df = df_result.groupBy("STUSAB").pivot("year").agg(
     sum("Land_to_Water_Ratio")
 )
 
+pivoted_ratio_df.filter(pivoted_ratio_df["STUSAB"] == "NM").show()
+
 # Calculate absolute changes in Land_to_Water_Ratio between years
 pivoted_ratio_df = pivoted_ratio_df.withColumn(
-    "Change_2000_2010", abs(col("2010") - col("2000"))
+    "Change_2000_2010", round(abs(col("2010") - col("2000")),2)
 )
 
 # Order by the total change and select the top 10 states
@@ -99,3 +114,7 @@ top_states_ratio.show()
 
 # Write the results to a CSV file
 top_states_ratio.coalesce(1).write.csv("/myp3/output/top_states_ratio", header=True, mode="overwrite")
+
+
+#make a column for Percent area, water
+df_result = df_result.withColumn("Percent area, water (%)", round(col("Total_water_Area")/col("Total_Land_Area"),2) )
