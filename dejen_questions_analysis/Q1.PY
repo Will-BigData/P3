@@ -86,6 +86,6 @@ for race in races:
 #final_result.show()
 
 # Save the combined result to HDFS to a single file
-final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1percentage")
+final_result.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q1")
 
 spark.stop()
