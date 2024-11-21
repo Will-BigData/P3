@@ -114,7 +114,3 @@ top_states_ratio.show()
 
 # Write the results to a CSV file
 top_states_ratio.coalesce(1).write.csv("/myp3/output/top_states_ratio", header=True, mode="overwrite")
-
-
-#make a column for Percent area, water
-df_result = df_result.withColumn("Percent area, water (%)", round(col("Total_water_Area")/col("Total_Land_Area"),2) )
