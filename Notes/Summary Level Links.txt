@@ -5,3 +5,5 @@ https://www2.census.gov/programs-surveys/decennial/rdo/about/2020-census-program
 https://mcdc.missouri.edu/geography/sumlevs/
 
 https://www.census.gov/programs-surveys/geography/technical-documentation/naming-convention/cartographic-boundary-file/carto-boundary-summary-level.html
+
+https://www2.census.gov/programs-surveys/decennial/2020/technical-documentation/complete-tech-docs/summary-file/2020Census_PL94_171Redistricting_StatesTechDoc_English.pdf

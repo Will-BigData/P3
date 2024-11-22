@@ -1,8 +1,5 @@
-from pyspark.sql import SparkSession, Row
+from pyspark.sql import Row
 from pyspark.sql.types import StructType, StructField, StringType
-
-# Start Spark session
-# spark = SparkSession.builder.appName("FixedWidthRead").getOrCreate()
 
 def generate_dict(filename):
     c_dict = {}
