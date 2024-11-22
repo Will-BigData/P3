@@ -1,14 +1,17 @@
 import os
+from dotenv import load_dotenv
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, when, sum, format_string, lag
 from pyspark.sql.window import Window
 from pyspark.sql.types import DoubleType
 
+load_dotenv()
 
 spark = SparkSession.builder.appName("PopGrowthTrendsByRegion").getOrCreate()
 
-p3data = spark.read.parquet("file:///mnt/c/Users/abrah/Desktop/BigData-project-repo/Project_3_Extras/p3_data_combined_parquet_minus_sumlev750")
+directory_path = os.getenv("TRIMMED_OUTPUT_DIRECTORY_PATH", "")
 
+p3data = spark.read.parquet(directory_path)
 
 p3data = p3data.withColumn("POP100", col("POP100").cast("int"))
 
