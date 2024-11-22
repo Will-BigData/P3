@@ -166,3 +166,5 @@ NotesToSelf.md
 output
 specified_columns/selected_columns_file.txt
 .DS_Store
+
+*.pbix
