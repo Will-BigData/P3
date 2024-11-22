@@ -10,8 +10,6 @@ from tkinter import messagebox
 load_dotenv()
 
 
-main_path = os.getenv('FOLDER_PATH', '')
-output_path = os.getenv("OUTPUT_PATH", '')
 data_path = os.getenv("DATA_PATH", '')
 trimmed_path = os.getenv("TRIMMED_OUTPUT_PATH", '')
 columns_file = './specified_columns/columns_file.txt'
@@ -52,6 +50,9 @@ def generate_parquet_file(column_checkboxes, read_data_func):
         messagebox.showerror("Error", "Columns file not found!")
 
     final_data = data.select(columns)
+    
+    final_data = final_data.filter(final_data["SUMLEV"] != 750)
+
     save_final_data_to_parquet(final_data)
     messagebox.showinfo("Success", "Parquet file generated successfully!")
 
