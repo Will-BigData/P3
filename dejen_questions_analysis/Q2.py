@@ -1,3 +1,5 @@
+# 2. WHAT ARE THE TOP 10 COUNTIES WITH THE HIGHEST DIVERSITY INDEX, AND HOW DOES IT CHANGE FROM 2000-2020?
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, lit, pow, when
 
