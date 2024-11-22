@@ -1,13 +1,11 @@
 import os
 from dotenv import load_dotenv
-
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, when, sum, format_string, lag
 from pyspark.sql.window import Window
 from pyspark.sql.types import DoubleType
 
 load_dotenv()
-
 
 spark = SparkSession.builder.appName("PopGrowthTrendsByRegion").getOrCreate()
 

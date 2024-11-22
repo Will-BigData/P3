@@ -6,6 +6,7 @@ from pyspark.sql.window import Window
 
 load_dotenv()
 
+
 spark = SparkSession.builder.appName("Population Movements By State").getOrCreate()
 
 directory_path = os.getenv("TRIMMED_OUTPUT_DIRECTORY_PATH", "")
@@ -35,7 +36,23 @@ state_population = (
     .orderBy("STATE", "YEAR")
 )
 
-window_spec = Window.partitionBy("STATE").orderBy("YEAR")
+fips_to_states_path = os.getenv("FIPS_TO_STATE_CSV_PATH", "")
+
+fips_to_state_df = spark.read.csv(fips_to_states_path, header=True)
+
+state_population = state_population.withColumn("STATE", col("STATE").cast("int"))
+fips_to_state_df = fips_to_state_df.withColumn("STATE (FIPS)", col("STATE (FIPS)").cast("int"))
+
+state_population.printSchema()
+fips_to_state_df.printSchema()
+
+state_population = state_population.join(
+    fips_to_state_df,
+    state_population["STATE"] == fips_to_state_df["STATE (FIPS)"],
+    "left"
+).drop(fips_to_state_df["STATE (FIPS)"])
+
+window_spec = Window.partitionBy("STATE_NAME").orderBy("YEAR")
 
 state_population = state_population.withColumn(
     "Prior_POP",
@@ -93,5 +110,5 @@ print("Percentage Moved across States between 2000, 2010, and 2020")
 print("===========================================================")
 
 percentage_moved.select(
-    "STATE", "YEAR", "Prior_POP", "Total Population", "Population_Moved", "Percentage_Moved"
-).orderBy("STATE", "YEAR").show(truncate=False)
+    "STATE_NAME", "YEAR", "Prior_POP", "Total Population", "Population_Moved", "Percentage_Moved"
+).orderBy("STATE_NAME", "YEAR").show(truncate=False)
