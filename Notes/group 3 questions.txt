@@ -64,6 +64,7 @@ Kenny:
 1. (# 13 in the original list) Housing Unit Changes: How did the number of housing units change by decade, and what is the comparison across states?
 Geoheader:
 HU100
+STATE
 Using the housing units count, we should be able to see the count for each decade in total, and then also subdivide it between states.
 
 2. How does population density vary by state?
@@ -75,7 +76,8 @@ Using the population count we should also be able to filter the total population
 3. Population Density and Housing Units: What is the ratio of population to housing units in each state over time (each decade), as well as each decade as a whole?
 Geoheader:
 POP100
-HU100 
+HU100
+STATE 
 Using the population count and housing units count we should be able to calculate the ratio of how many people lived in each housing unit by state and national.
 
 James
