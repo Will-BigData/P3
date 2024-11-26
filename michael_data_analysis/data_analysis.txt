@@ -1,0 +1,7 @@
+questions being answered all involve area land and area water 
+1.) finding out the change in land to water area by state over time (2000 to 2010) using ratio.
+ 
+2.)Top 5 States with the Highest Percentage of Water Area Compared to Total Area.
+
+3.) use land and water area by state to order states by largest to smallest.
+

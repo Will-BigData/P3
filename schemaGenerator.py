@@ -18,44 +18,8 @@ def generate2020GeoSegmentSchema():
 
     return schema
 
-def generateSegment1Schema():
-    segment = open("data/2020_FieldNames_Segment1.csv")
-    line = segment.readline().strip()
-    columns = line.split(',')
-
-    segment_string_columns = ["FILEID", "CHARITER", "CIFSN", "STUSAB"]
-    fields_array = []
-
-    for column in columns:
-        if column in segment_string_columns:
-            fields_array.append(StructField(column, StringType(), True))
-        else:
-            fields_array.append(StructField(column, IntegerType(), True))
-
-    schema = StructType(fields_array)
-
-    return schema
-
-def generate2020And2010Segment2Schema():
-    segment = open("data/2020_FieldNames_Segment2.csv")
-    line = segment.readline().strip()
-    columns = line.split(',')
-
-    segment_string_columns = ["FILEID", "CHARITER", "CIFSN", "STUSAB"]
-    fields_array = []
-
-    for column in columns:
-        if column in segment_string_columns:
-            fields_array.append(StructField(column, StringType(), True))
-        else:
-            fields_array.append(StructField(column, IntegerType(), True))
-
-    schema = StructType(fields_array)
-
-    return schema
-
-def generateSegment3Schema():
-    segment = open("data/2020_FieldNames_Segment3.csv")
+def generateSegmentSchema(data):
+    segment = open(data)
     line = segment.readline().strip()
     columns = line.split(',')
 

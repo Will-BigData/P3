@@ -2,7 +2,7 @@ group 3 data analysis questions:
 
 
 Michael
-1. What are the land and water areas (AREALAND, AREAWATR) of different geographic divisions, and how do they compare?
+1. What are the land and water areas (AREALAND, AREAWATR) of different geographic divisions, and how do they compare across 2000 2010 and 2020 census ?
 
 
 how this could be done:
@@ -64,24 +64,21 @@ Kenny:
 1. (# 13 in the original list) Housing Unit Changes: How did the number of housing units change by decade, and what is the comparison across states?
 Geoheader:
 HU100
+STATE
 Using the housing units count, we should be able to see the count for each decade in total, and then also subdivide it between states.
 
-2. Population Density: How did population density vary across urban and rural areas over the decade(s)?
+2. How does population density vary by state?
 Geoheader:
 POP100
-UA 
-UATYPE (maybe)
-UR
-Using the population count we should see the total density and then find out which lived in an urban area versus a rural area and possibly show the differences between the 3 decades (or keep it at one decade).
+STATE (FIPS) 
+Using the population count we should also be able to filter the total population by state. Creating visuals showing all states per decade and then all of the decade totals in it's own visual. 
 
-3. How does population density vary by summary level (e.g., city, county, state)?
+3. Population Density and Housing Units: What is the ratio of population to housing units in each state over time (each decade), as well as each decade as a whole?
 Geoheader:
 POP100
-SUMLEV
-STATE (FIPS) (maybe)
-COUNTY (FIPS) (maybe)
-CONCIT (maybe - Consolidated City)
-Using the population count we should also be able to filter the total population by summary level - thinking state, city, and maybe county. 
+HU100
+STATE 
+Using the population count and housing units count we should be able to calculate the ratio of how many people lived in each housing unit by state and national.
 
 James
 1. What is the total percentage of people of mixed race across the years? By state?

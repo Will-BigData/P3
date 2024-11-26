@@ -1,11 +1,12 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import lit
-from schemaGenerator import generate2020GeoSegmentSchema, generateSegment1Schema, generate2020And2010Segment2Schema, generate2000Segment2Schema
+from schemaGenerator import generate2020GeoSegmentSchema, generateSegmentSchema, generate2000Segment2Schema
 from pygen_census import gen_schema
 from dotenv import load_dotenv
 import os
+
 from specified_columns.select_specified_columns import select_specified_columns
-load_dotenv()
+load_dotenv(override=True)
 
 main_path = os.getenv('FOLDER_PATH', '')
 output_path = os.getenv("OUTPUT_PATH", "")
@@ -15,29 +16,34 @@ spark_builder.appName("p3-census").config("spark.master", "local[*]")
 
 spark: SparkSession = spark_builder.getOrCreate()
 sc = spark.sparkContext
+segment1_schema = generateSegmentSchema('data/2020_FieldNames_Segment1.csv')
+segment2_schema = generateSegmentSchema('data/2020_FieldNames_Segment2.csv')
 
 geo_df = spark.read.csv(f'{main_path}/p3_data_2020/GeoHeader', sep='|', schema=generate2020GeoSegmentSchema())
-seg1_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment1', sep='|', schema=generateSegment1Schema())
-seg2_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment2', sep='|', schema=generate2020And2010Segment2Schema())
+seg1_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment1', sep='|', schema=segment1_schema)
+seg2_df = spark.read.csv(f'{main_path}/p3_data_2020/Segment2', sep='|', schema=segment2_schema)
 
 geo_df_2010 = gen_schema(spark.read.text(f"{main_path}/p3_data_2010/GeoHeader"), spark, 2010)
-seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=generateSegment1Schema())
-seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', schema=generate2020And2010Segment2Schema())
+seg1_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment1', sep=',', schema=segment1_schema)
+seg2_df_2010 = spark.read.csv(f'{main_path}/p3_data_2010/Segment2', sep=',', schema=segment2_schema)
 
 geo_df_2000 = gen_schema(spark.read.text(f"{main_path}/p3_data_2000/GeoHeader"), spark, 2000)
-seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=generateSegment1Schema())
+seg1_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment1', sep=',', schema=segment1_schema)
 seg2_df_2000 = spark.read.csv(f'{main_path}/p3_data_2000/Segment2', sep=',', schema=generate2000Segment2Schema())
 
 filename = './specified_columns/columns_file.txt'
 geo_df = select_specified_columns(geo_df, filename)
+geo_df = geo_df.where(geo_df.SUMLEV != 750)
 seg1_df = select_specified_columns(seg1_df, filename)
 seg2_df = select_specified_columns(seg2_df, filename)
 
 geo_df_2010 = select_specified_columns(geo_df_2010, filename)
+geo_df_2010 = geo_df_2010.where(geo_df_2010.SUMLEV != 750)
 seg1_df_2010 = select_specified_columns(seg1_df_2010, filename)
 seg2_df_2010 = select_specified_columns(seg2_df_2010, filename)
 
 geo_df_2000 = select_specified_columns(geo_df_2000, filename)
+geo_df_2000 = geo_df_2000.where(geo_df_2000.SUMLEV != 750)
 seg1_df_2000 = select_specified_columns(seg1_df_2000, filename)
 seg2_df_2000 = select_specified_columns(seg2_df_2000, filename)
 
@@ -48,4 +54,6 @@ combined_df_2000 = geo_df_2000.join(seg1_df_2000, link_cols).join(seg2_df_2000, 
 
 final_data = combined_df_2020.unionByName(combined_df_2010, allowMissingColumns=True).unionByName(combined_df_2000, allowMissingColumns=True)
 
-final_data.write.partitionBy("YEAR", "STUSAB").parquet(f"{output_path}/p3_data_combined_parquet")
+final_data.write.mode("overwrite").parquet(output_path)
+
+# final_data.write.partitionBy("YEAR", "STUSAB").parquet(output_path)
