@@ -1,4 +1,4 @@
-### 1: Total Population by Race Across the United States (2000–2020)
+### Total Population by Race Across the United States (2000–2020)
 
 #### **Overview**
 This analysis explores the total population by race across the United States, focusing on changes from 2000 to 2020. The analysis includes percentage changes in population for each race at the state level over the three decades.
