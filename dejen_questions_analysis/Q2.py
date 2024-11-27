@@ -61,7 +61,6 @@ def filter_county_level_data(df):
 def calculate_diversity_index(df, year):
     county_df = filter_county_level_data(df)
 
-    # Add Diversity Index calculation
     diversity_df = county_df.withColumn(
         "Diversity_Index",
         lit(1) - (
@@ -78,7 +77,6 @@ def calculate_diversity_index(df, year):
     diversity_df = diversity_df.withColumn("Year", lit(year))
     return diversity_df.select("STUSAB", "COUNTY", "Diversity_Index", "Year")
 
-# Function to find top 10 counties by diversity index
 def top_10_counties_by_diversity_index(df):
     return df.orderBy(col("Diversity_Index").desc()).limit(10)
 
@@ -102,6 +100,7 @@ final_result_with_names = final_top_10.join(
     how="left"
 ).select("STUSAB", "State_Name", "County_Name", "COUNTY", "Diversity_Index", "Year")
 
+final_result_with_names.show()
 
 final_result_with_names.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dejtes/census_data/Q2_with_county_names")
 

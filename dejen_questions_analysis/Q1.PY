@@ -5,10 +5,8 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import sum, lit, when, col, format_string, lag
 from pyspark.sql.window import Window
 
-# Initialize Spark Session
 spark = SparkSession.builder.appName("CensusRaceAnalysis").getOrCreate()
 
-# Path for data
 base_path = "hdfs:///user/dirname/census_data_parquet"
 
 # Load datasets
@@ -52,7 +50,6 @@ result_2000 = calculate_state_race_population(df_2000, 2000)
 result_2010 = calculate_state_race_population(df_2010, 2010)
 result_2020 = calculate_state_race_population(df_2020, 2020)
 
-# Combine the results
 final_result = result_2000.union(result_2010).union(result_2020)
 
 # Window specification for cumulative sums by race across all states
@@ -75,7 +72,6 @@ for race in races:
     percent_change_col = f"{race}_Percent_Change"
     prev_value = lag(col(race)).over(window_spec)
     
-    # Calculate percentage change and format it
     final_result = final_result.withColumn(
         percent_change_col,
         when(prev_value.isNotNull() & (prev_value != 0),
