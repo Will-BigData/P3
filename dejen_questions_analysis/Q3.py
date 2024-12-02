@@ -69,8 +69,5 @@ aggregated_distribution = final_racial_distribution.groupBy("SUMLEV", "Year").ag
     sum("Two_or_More_Races_Proportion").alias("Avg_Two_or_More_Races_Proportion")
 )
 
-# Show aggregated results
-#aggregated_distribution.show()
-
-
+# Write the results to HDFS
 aggregated_distribution.coalesce(1).write.mode("overwrite").option("header", "true").csv("hdfs:///user/dirname/census_data/Q3")
